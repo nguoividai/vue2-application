@@ -1,0 +1,43 @@
+import { taskSeeders } from "./seeder";
+
+const taskModule = {
+  state: () => ({
+    tasks: [...taskSeeders],
+    taskManagements: [...taskSeeders],
+  }),
+  mutations: {
+    createTask(state, payload) {
+      if (!payload.text) {
+        return;
+      }
+      state.tasks.unshift(payload);
+    },
+    deleteTask(state, payload) {
+      state.tasks = state.tasks.filter((task) => task.id !== payload.id);
+    },
+    updateTask(state, payload) {
+      state.tasks = state.tasks.map((task) =>
+        task.id === payload.id ? { ...task, ...payload } : task
+      );
+    },
+  },
+  getters: {
+    taskCompleted(state) {
+      return state.tasks?.filter((e) => e.done)?.length ?? 0;
+    },
+    taskRemaining(state) {
+      return state.tasks?.filter((e) => !e.done)?.length ?? 0;
+    },
+    progress(state, getters) {
+      return (getters.taskCompleted / state.tasks.length) * 100;
+    },
+    taskManagementCompletedList(state) {
+      return state.taskManagements?.filter((e) => e.done);
+    },
+    taskManagementRemainingList(state) {
+      return state.taskManagements?.filter((e) => !e.done);
+    },
+  },
+};
+
+export default taskModule;

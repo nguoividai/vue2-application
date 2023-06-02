@@ -1,0 +1,22 @@
+a {
+  text-decoration: none;
+
+  i.v-icon {
+    color: var(--info) !important;
+  }
+}
+
+.active-list-transparent {
+  &::before {
+    background-color: transparent;
+  }
+}
+
+$start: 0;
+$end: 100;
+
+@for $i from $start through $end {
+  .h-#{$i} {
+    height: percentage(0.01) * $i;
+  }
+}
