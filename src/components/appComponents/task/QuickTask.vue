@@ -4,16 +4,8 @@
       <h3 class="title blue-grey--text text--darken-2 font-weight-regular mb-4">
         Task
       </h3>
-      <v-text-field
-        v-model="task"
-        label="What are you working on?"
-        filled
-        @keydown.enter="create"
-      >
-        <v-fade-transition v-slot:append>
-          <v-icon v-if="task" @click="create"> add_circle </v-icon>
-        </v-fade-transition>
-      </v-text-field>
+
+      <task-add :callback="callbackCreate" />
 
       <h2 class="font-weight-medium success--text text-center">
         Tasks:&nbsp;
@@ -41,25 +33,28 @@
 
       <v-divider class="mb-4"></v-divider>
 
-      <task-list :tasks="tasks" />
+      <task-list :tasks="tasks" :updateTask="updateTask" />
 
       <v-divider></v-divider>
       <div class="mt-1">
-        <a href="#">View more <v-icon>mdi-chevron-double-right</v-icon></a>
+        <a href="#/dashboard/task-management">
+          View more <v-icon>mdi-chevron-double-right</v-icon>
+        </a>
       </div>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import TaskList from "./TaskList.vue";
+import TaskAdd from "./TaskAdd.vue";
 
 export default {
-  components: { TaskList },
+  components: { TaskList, TaskAdd },
   computed: {
     ...mapState({
-      tasks: (state) => state.task.tasks,
+      tasks: (state) => state.task.taskManagements,
     }),
     ...mapGetters([
       "taskCompleted",
@@ -68,12 +63,11 @@ export default {
       // ...
     ]),
   },
-  data() {
-    return {
-      task: null,
-    };
+  created() {
+    this.getListTaskAction();
   },
   methods: {
+    ...mapActions(["getListTaskAction", "updateTaskAction"]),
     ...mapMutations([
       "createTask", // map `this.increment()` to `this.$store.commit('increment')`
       "updateTask",
@@ -82,6 +76,17 @@ export default {
     create() {
       this.createTask({ done: false, text: this.task });
       this.task = null;
+    },
+    callbackCreate(data) {
+      this.$store.commit("createTaskManagement", data);
+    },
+    updateTask(payload) {
+      this.updateTaskAction({
+        ...payload,
+        callback: (data) => {
+          this.$store.commit("updateTaskManagement", data);
+        },
+      });
     },
   },
 };

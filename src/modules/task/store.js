@@ -1,10 +1,9 @@
-import { taskSeeders } from "./seeder";
 import actions from "./actions";
 
 const taskModule = {
   state: () => ({
-    tasks: [...taskSeeders],
-    taskManagements: [...taskSeeders],
+    tasks: [],
+    taskManagements: [],
     loading: false,
     loadingBtn: false,
   }),
@@ -37,13 +36,13 @@ const taskModule = {
   },
   getters: {
     taskCompleted(state) {
-      return state.tasks?.filter((e) => e.done)?.length ?? 0;
+      return state.taskManagements?.filter((e) => e.done)?.length ?? 0;
     },
     taskRemaining(state) {
-      return state.tasks?.filter((e) => !e.done)?.length ?? 0;
+      return state.taskManagements?.filter((e) => !e.done)?.length ?? 0;
     },
     progress(state, getters) {
-      return (getters.taskCompleted / state.tasks.length) * 100;
+      return (getters.taskCompleted / state.taskManagements.length) * 100;
     },
     taskManagementCompletedList(state) {
       return state.taskManagements?.filter((e) => e.done);

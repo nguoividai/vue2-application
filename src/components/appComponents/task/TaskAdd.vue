@@ -15,6 +15,12 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
+  props: {
+    callback: {
+      type: Function,
+      default: () => {},
+    },
+  },
   data: () => ({
     task: null,
   }),
@@ -32,7 +38,7 @@ export default {
       this.createTaskAction({
         text: this.task,
         callback: (data) => {
-          this.$store.commit("createTaskManagement", data);
+          this.callback(data);
           this.task = null;
         },
       });

@@ -19,7 +19,7 @@
             />
           </v-col>
           <v-col cols="12" sm="12">
-            <task-add />
+            <task-add :callback="onCallBackCreate" />
           </v-col>
           <v-col cols="12" lg="12">
             <v-tabs v-model="tab" grow @change="changeTab">
@@ -42,7 +42,7 @@
                       :tasks="taskManagementCompletedList"
                       :updateTask="updateTask"
                     />
-                    <task-list v-else :tasks="tasks" />
+                    <task-list v-else :tasks="tasks" :updateTask="updateTask" />
 
                     <v-divider></v-divider>
                     <v-btn
@@ -157,6 +157,9 @@ export default {
           this.showPagination = data?.length > 0;
         },
       });
+    },
+    onCallBackCreate(data) {
+      this.$store.commit("createTaskManagement", data);
     },
     changeFilter() {
       this.page = DEFAULT_PAGE;
