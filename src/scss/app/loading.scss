@@ -1,0 +1,20 @@
+.overlay-loading {
+  position: relative;
+
+  .loading-icon {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  .loading-body.active {
+    opacity: 0.1;
+    pointer-events: none;
+  }
+}

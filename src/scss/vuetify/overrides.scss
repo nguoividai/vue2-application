@@ -3,6 +3,8 @@
 @import "sidebar";
 @import "buttons";
 @import "../app/custom.scss";
+@import "../app/loading.scss";
+
 .theme--light .v-content {
   background-color: #eef5f9;
 }

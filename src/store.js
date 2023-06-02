@@ -10,6 +10,7 @@ export default new Vuex.Store({
     task: taskModule,
     note: noteModule,
   },
+
   state: {
     Sidebar_drawer: null,
     Customizer_drawer: false,

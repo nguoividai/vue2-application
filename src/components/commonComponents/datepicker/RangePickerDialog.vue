@@ -16,10 +16,33 @@
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker range v-model="dates" @input="handleChange">
+    <v-date-picker range v-model="dates">
       <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="$refs.dialog.save(dates)"> OK </v-btn>
+      <v-btn
+        text
+        color="secondary"
+        @click="
+          () => {
+            handleChange();
+            $refs.dialog.save(null);
+          }
+        "
+      >
+        Clear
+      </v-btn>
+      <v-btn text color="secondary" @click="modal = false"> Cancel </v-btn>
+      <v-btn
+        text
+        color="primary"
+        @click="
+          () => {
+            handleChange();
+            $refs.dialog.save(dates);
+          }
+        "
+      >
+        OK
+      </v-btn>
     </v-date-picker>
   </v-dialog>
 </template>
