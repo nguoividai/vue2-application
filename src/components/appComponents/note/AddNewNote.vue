@@ -32,14 +32,32 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
+        <v-btn
+          v-if="note.id"
+          :loading="loadingBtn"
+          color="red"
+          variant="text"
+          @click="onDelete(note)"
+        >
+          <v-icon>mdi-delete</v-icon> Delete
+        </v-btn>
         <v-btn color="link" variant="text" @click="onClose"> Close </v-btn>
-        <v-btn color="primary" variant="text" @click="onSubmit"> Save </v-btn>
+        <v-btn
+          :loading="loadingBtn"
+          color="primary"
+          variant="text"
+          @click="onSubmit"
+        >
+          Save
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   props: {
     onShow: {
@@ -56,6 +74,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    onDelete: {
+      type: Function,
+      default: () => {},
+    },
     visible: {
       type: Boolean,
       default: false,
@@ -65,6 +87,11 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  computed: {
+    ...mapState({
+      loadingBtn: (state) => state.note.loadingBtn,
+    }),
   },
 };
 </script>

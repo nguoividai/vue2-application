@@ -13,6 +13,7 @@
           :onSubmit="onSubmit"
           :visible="visible"
           :note="itemEdit"
+          :onDelete="onDelete"
         />
       </h3>
       <v-list two-line>
@@ -40,7 +41,7 @@
                     @click="
                       (e) => {
                         e.stopPropagation();
-                        onChangeIsImportant(item.id);
+                        onChangeIsImportant(item);
                       }
                     "
                   >
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
@@ -79,12 +80,22 @@ export default {
       itemEdit: null,
     };
   },
+  created() {
+    this.getListNoteAction();
+  },
   methods: {
-    ...mapMutations(["updateNote", "createNote", "deleteNote"]),
-    onChangeIsImportant(itemId) {
-      this.items = this.items.map((e) =>
-        e.id === itemId ? { ...e, isImportant: !e.isImportant } : e
-      );
+    ...mapActions([
+      "getListNoteAction",
+      "updateNoteAction",
+      "createNoteAction",
+      "deleteNoteAction",
+    ]),
+    onChangeIsImportant(item) {
+      this.$store.commit("updateNote", {
+        ...item,
+        isImportant: !item.isImportant,
+      });
+      this.updateNoteAction({ ...item, isImportant: !item.isImportant });
     },
     onShow(itemEdit) {
       this.itemEdit = itemEdit ? { ...itemEdit } : null;
@@ -95,13 +106,31 @@ export default {
       this.itemEdit = null;
     },
     onSubmit() {
+      const vm = this;
       if (!this.itemEdit?.id) {
-        this.createNote(this.itemEdit);
+        this.createNoteAction({
+          ...this.itemEdit,
+          callback: () => {
+            vm.onClose();
+          },
+        });
       } else {
-        this.updateNote(this.itemEdit);
+        this.updateNoteAction({
+          ...this.itemEdit,
+          callback: () => {
+            vm.onClose();
+          },
+        });
       }
-
-      this.onClose();
+    },
+    onDelete(item) {
+      const vm = this;
+      this.deleteNoteAction({
+        ...item,
+        callback: () => {
+          vm.onClose();
+        },
+      });
     },
   },
 };

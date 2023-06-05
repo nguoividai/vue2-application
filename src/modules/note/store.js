@@ -1,9 +1,12 @@
-import { noteSeeders } from "./seeder";
+import actions from "./actions";
 
 const noteModule = {
   state: () => ({
-    notes: [...noteSeeders],
+    notes: [],
+    loading: false,
+    loadingBtn: false,
   }),
+  actions,
   mutations: {
     createNote(state, payload) {
       if (!payload.title) {
