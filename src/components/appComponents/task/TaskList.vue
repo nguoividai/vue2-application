@@ -26,31 +26,19 @@
             </v-list-item-title>
           </v-list-item-content>
 
-          <!-- <v-list-item-action>
-            <v-checkbox
-              :value="task.done"
-              :color="(task.done && 'grey') || 'primary'"
-            >
-              <template v-slot:label>
-                <div
-                  :class="
-                    (task.done && 'grey--text') ||
-                    'blue-grey--text text--darken-2'
-                  "
-                  class="ml-4 text-truncate"
-                  v-text="task.text"
-                ></div>
-              </template>
-            </v-checkbox>
-          </v-list-item-action> -->
-
-          <v-spacer></v-spacer>
-
           <v-scroll-x-transition>
             <v-icon v-if="task.done" color="success">mdi-check</v-icon>
-            <small v-else class="text--darken-4">{{
-              task.created_at | timeAgo
-            }}</small>
+            <small v-else class="text--darken-4 text-right">
+              {{ task.created_at | timeAgo }} <br />
+              <v-btn
+                :loading="loadingBtn"
+                icon
+                color="red"
+                @click="deleteTask(task)"
+              >
+                <v-icon color="danger">mdi-delete</v-icon>
+              </v-btn>
+            </small>
           </v-scroll-x-transition>
         </v-list-item>
       </template>
@@ -60,6 +48,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     tasks: {
@@ -70,6 +59,15 @@ export default {
       type: Function,
       default: () => {},
     },
+    deleteTask: {
+      type: Function,
+      default: () => {},
+    },
+  },
+  computed: {
+    ...mapState({
+      loadingBtn: (state) => state.task.loadingBtn,
+    }),
   },
 };
 </script>

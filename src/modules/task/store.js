@@ -4,6 +4,7 @@ const taskModule = {
   state: () => ({
     tasks: [],
     taskManagements: [],
+    report: {},
     loading: false,
     loadingBtn: false,
   }),

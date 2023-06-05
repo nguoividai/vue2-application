@@ -7,6 +7,7 @@ import "./plugins/base";
 import { timeAgo } from "./filters";
 
 Vue.config.productionTip = process.env.NODE_ENV ? true : false;
+Vue.config.devtools = process.env.NODE_ENV ? true : false;
 
 Vue.filter("timeAgo", timeAgo);
 

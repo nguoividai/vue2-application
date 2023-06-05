@@ -33,7 +33,11 @@
 
       <v-divider class="mb-4"></v-divider>
 
-      <task-list :tasks="tasks" :updateTask="updateTask" />
+      <task-list
+        :tasks="tasks"
+        :updateTask="updateTask"
+        :deleteTask="deleteTaskAction"
+      />
 
       <v-divider></v-divider>
       <div class="mt-1">
@@ -67,11 +71,14 @@ export default {
     this.getListTaskAction();
   },
   methods: {
-    ...mapActions(["getListTaskAction", "updateTaskAction"]),
+    ...mapActions([
+      "getListTaskAction",
+      "updateTaskAction",
+      "deleteTaskAction",
+    ]),
     ...mapMutations([
       "createTask", // map `this.increment()` to `this.$store.commit('increment')`
       "updateTask",
-      "deleteTask",
     ]),
     create() {
       this.createTask({ done: false, text: this.task });

@@ -3,6 +3,7 @@ import {
   updateTaskAPI,
   createTaskAPI,
   deleteTaskAPI,
+  reportTaskAPI,
 } from "./apis";
 
 const actions = {
@@ -71,8 +72,20 @@ const actions = {
   async deleteTaskAction({ commit, state }, payload) {
     try {
       state.loadingBtn = true;
-      const { data } = await deleteTaskAPI(payload);
-      commit("deleteTaskManagement", data.data);
+      await deleteTaskAPI(payload);
+      commit("deleteTaskManagement", payload);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.loadingBtn = false;
+    }
+  },
+  async reportTaskAction({ state }, payload) {
+    try {
+      state.loadingBtn = true;
+      const { data } = await reportTaskAPI(payload);
+      state.report = { ...data.data };
+      console.log(data.data);
     } catch (e) {
       console.error(e);
     } finally {

@@ -15,3 +15,7 @@ export const updateTaskAPI = (payload) => {
 export const deleteTaskAPI = (payload) => {
   return axiosInceptors.delete("tasks/" + payload.id);
 };
+
+export const reportTaskAPI = () => {
+  return axiosInceptors.get("tasks/report");
+};

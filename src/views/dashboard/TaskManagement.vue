@@ -25,6 +25,13 @@
             <v-tabs v-model="tab" grow @change="changeTab">
               <v-tab v-for="item in items" :key="item" :value="item">
                 {{ item }}
+                <span class="ms-1" v-if="item === 'Remaining'">
+                  ({{ report.remainingTask }})
+                </span>
+                <span class="ms-1" v-else-if="item === 'Completed'">
+                  ({{ report.completedTask }})
+                </span>
+                <span class="ms-1" v-else> ({{ report.allTask }}) </span>
               </v-tab>
             </v-tabs>
 
@@ -36,13 +43,19 @@
                       v-if="item === 'Remaining'"
                       :tasks="taskManagementRemainingList"
                       :updateTask="updateTask"
+                      :deleteTask="deleteTaskAction"
                     />
                     <task-list
                       v-else-if="item === 'Completed'"
                       :tasks="taskManagementCompletedList"
                       :updateTask="updateTask"
                     />
-                    <task-list v-else :tasks="tasks" :updateTask="updateTask" />
+                    <task-list
+                      v-else
+                      :tasks="tasks"
+                      :updateTask="updateTask"
+                      :deleteTask="deleteTaskAction"
+                    />
 
                     <v-divider></v-divider>
                     <v-btn
@@ -79,6 +92,7 @@ export default {
     ...mapState({
       tasks: (state) => state.task.taskManagements,
       loading: (state) => state.task.loading,
+      report: (state) => state.task.report,
     }),
     ...mapGetters([
       "taskManagementCompletedList",
@@ -114,6 +128,7 @@ export default {
       "createTaskAction",
       "updateTaskAction",
       "deleteTaskAction",
+      "reportTaskAction",
     ]),
     updateTask(payload) {
       this.updateTaskAction({
@@ -126,18 +141,23 @@ export default {
     changeTab(tabIndex) {
       const tab = this.items[tabIndex];
       this.page = DEFAULT_PAGE;
-      console.log("filter", this.filter);
-      this.getListTaskAction({
+      // console.log("filter", this.filter);
+      const filterList = {
         page: this.page,
         search: this.filter.search,
         start_date: this.filter?.dates ? this.filter.dates[0] : undefined,
         end_date: this.filter?.dates ? this.filter.dates[1] : undefined,
         done:
           tab === "Remaining" ? false : tab === "Completed" ? true : undefined,
+      };
+
+      this.getListTaskAction({
+        ...filterList,
         callback: (data) => {
           this.showPagination = data?.length > 0;
         },
       });
+      this.reportTaskAction(filterList);
     },
     loadMore() {
       this.page += 1;
