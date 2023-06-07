@@ -84,7 +84,7 @@ import TaskList from "../../components/appComponents/task/TaskList.vue";
 import RangePickerDialog from "../../components/commonComponents/datepicker/RangePickerDialog.vue";
 import OverlayLoading from "../../components/commonComponents/loading/OverlayLoading.vue";
 import TaskAdd from "../../components/appComponents/task/TaskAdd.vue";
-import { DEFAULT_PAGE } from "@/constants/app.constant";
+import { DEFAULT_PAGE, DEFAULT_LIMIT } from "@/constants/app.constant";
 
 export default {
   components: { TaskList, RangePickerDialog, OverlayLoading, TaskAdd },
@@ -154,7 +154,7 @@ export default {
       this.getListTaskAction({
         ...filterList,
         callback: (data) => {
-          this.showPagination = data?.length > 0;
+          this.showPagination = data?.length >= DEFAULT_LIMIT;
         },
       });
       this.reportTaskAction(filterList);

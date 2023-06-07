@@ -2,6 +2,7 @@
   <v-app id="inspire">
     <Header v-model="expandOnHover"></Header>
     <Sidebar :expand-on-hover.sync="expandOnHover"></Sidebar>
+    <SnackbarNotifier />
     <v-content>
       <v-container fluid>
         <router-view />
@@ -16,6 +17,7 @@
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./footer/Footer";
+import SnackbarNotifier from "@/components/vuexComponents/SnackbarNotifier";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "Layout",
@@ -24,6 +26,7 @@ export default {
     Header,
     Sidebar,
     Footer,
+    SnackbarNotifier,
   },
 
   props: {

@@ -5,6 +5,7 @@ import {
   deleteTaskAPI,
   reportTaskAPI,
 } from "./apis";
+import Vue from "vue";
 
 const actions = {
   async getListTaskAction({ state }, payload) {
@@ -18,6 +19,7 @@ const actions = {
         callback(data.data);
       }
     } catch (e) {
+      Vue.prototype.$notifier.showError();
       console.error(e);
     } finally {
       state.loading = false;
@@ -36,6 +38,7 @@ const actions = {
         callback(data.data);
       }
     } catch (e) {
+      Vue.prototype.$notifier.showError();
       console.error(e);
     } finally {
       state.loading = false;
@@ -45,11 +48,12 @@ const actions = {
     try {
       state.loadingBtn = true;
       const { data } = await updateTaskAPI(payload);
-
+      Vue.prototype.$notifier.showSuccess("Update task successfully");
       if (payload.callback) {
         payload.callback(data.data);
       }
     } catch (e) {
+      Vue.prototype.$notifier.showError();
       console.error(e);
     } finally {
       state.loadingBtn = false;
@@ -59,11 +63,12 @@ const actions = {
     try {
       state.loadingBtn = true;
       const { data } = await createTaskAPI(payload);
-
+      Vue.prototype.$notifier.showSuccess("Create task successfully");
       if (payload.callback) {
         payload.callback(data.data);
       }
     } catch (e) {
+      Vue.prototype.$notifier.showError();
       console.error(e);
     } finally {
       state.loadingBtn = false;
@@ -74,7 +79,9 @@ const actions = {
       state.loadingBtn = true;
       await deleteTaskAPI(payload);
       commit("deleteTaskManagement", payload);
+      Vue.prototype.$notifier.showSuccess("Delete task successfully");
     } catch (e) {
+      Vue.prototype.$notifier.showError();
       console.error(e);
     } finally {
       state.loadingBtn = false;
@@ -87,6 +94,7 @@ const actions = {
       state.report = { ...data.data };
       console.log(data.data);
     } catch (e) {
+      Vue.prototype.$notifier.showError();
       console.error(e);
     } finally {
       state.loadingBtn = false;
